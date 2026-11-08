@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스텔라이브 노래 이상형 월드컵</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- 구글 애드센스 태그 -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+  <div class="main-wrapper">
+    <!-- GNB 상단 헤더 -->
+<!-- GNB 상단 헤더 -->
+<header class="navbar">
+  <div class="logo">
+    <h1>STELLIVE <span class="accent-text">SONG CUP</span></h1>
+  </div>
+  
+  <div class="header-controls">
+    <!-- 하이라이트 토글 -->
+    <div class="toggle-container">
+      <span class="toggle-label">하이라이트</span>
+      <label class="switch">
+        <input type="checkbox" id="highlight-toggle">
+        <span class="slider round"></span>
+      </label>
+    </div>
+
+    <!-- [신규] 다크 모드 토글 버튼 (알림 없이 조용하게 전환) -->
+    <button id="theme-toggle" class="btn-theme-toggle" aria-label="다크 모드 전환">
+      <span class="theme-text">다크 모드</span>
+    </button>
+  </div>
+</header>
+
+    <!-- [애드센스 구좌 1] 상단 배너 -->
+    <div class="ad-banner ad-top">
+      <span class="ad-label">ADVERTISEMENT</span>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="1111111111"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+
+<!-- 1. 시작 화면 -->
+    <section id="start-view" class="glass-card start-card">
+      <div class="badge">STELLIVE MUSIC TOURNAMENT</div>
+      <h2>스텔라이브 최애 곡을 가려라!</h2>
+      <p id="start-desc">원하는 라운드 수를 선택하고 월드컵을 시작하세요.</p>
+      
+      <!-- 기존 픽스 라운드 버튼 -->
+      <div class="round-grid">
+        <button class="btn-round" onclick="selectRound(8)">
+          <span class="round-num">8강</span>
+          <span class="round-sub">스피드전</span>
+        </button>
+        <button class="btn-round" onclick="selectRound(16)">
+          <span class="round-num">16강</span>
+          <span class="round-sub">추천 모드</span>
+        </button>
+        <button class="btn-round" onclick="selectRound(32)">
+          <span class="round-num">32강</span>
+          <span class="round-sub">마스터 모드</span>
+        </button>
+        <button class="btn-round highlight" onclick="selectRound(0)">
+          <span class="round-num">전체 진행</span>
+          <span class="round-sub">전곡 풀 매치</span>
+        </button>
+      </div>
+
+      <!-- [신규] 사용자 직접 라운드 입력 구역 -->
+      <div class="custom-round-container">
+        <span class="custom-round-title">라운드 수 직접 입력하기</span>
+        <div class="custom-round-input-group">
+          <input type="number" id="custom-round-input" placeholder="예: 12, 24, 50" min="2" step="2">
+          <button class="btn-custom-start" onclick="selectCustomRound()">시작 </button>
+        </div>
+      </div>
+    </section>
+    <!-- 2. 대진 진행 화면 -->
+    <div id="game-header" class="game-header hidden">
+      <div class="progress-bar-bg">
+        <div id="progress-bar" class="progress-bar-fill"></div>
+      </div>
+      <h2 id="round-title" class="round-title">대진표 준비 중...</h2>
+    </div>
+
+<!-- index.html의 main 구역 부분 -->
+<main id="game-view" class="match-stage hidden">
+  <!-- 왼쪽 노래 카드 -->
+  <div class="song-card" id="card-left">
+    <div class="video-wrapper">
+      <div id="player-left"></div> <!-- iframe 대신 API가 생성할 div 태그 -->
+      <div class="card-overlay-hint"> 마우스를 올리면 재생됩니다</div>
+    </div>
+    <div class="song-meta">
+      <h3 id="title-left">노래 A</h3>
+      <p id="singer-left">가수 A</p>
+      <button class="btn-select" onclick="selectWinner(0)">선택하기 </button>
+    </div>
+  </div>
+
+  <div class="vs-divider">
+    <span>VS</span>
+  </div>
+
+  <!-- 오른쪽 노래 카드 -->
+  <div class="song-card" id="card-right">
+    <div class="video-wrapper">
+      <div id="player-right"></div> <!-- iframe 대신 API가 생성할 div 태그 -->
+      <div class="card-overlay-hint">마우스를 올리면 재생됩니다</div>
+    </div>
+    <div class="song-meta">
+      <h3 id="title-right">노래 B</h3>
+      <p id="singer-right">가수 B</p>
+      <button class="btn-select" onclick="selectWinner(1)">선택하기 </button>
+    </div>
+  </div>
+</main>
+    <!-- [애드센스 구좌 2] 경기 진행 하단 띠 광고 -->
+    <div class="ad-banner ad-mid">
+      <span class="ad-label">ADVERTISEMENT</span>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="2222222222"
+           data-ad-format="horizontal"
+           data-full-width-responsive="true"></ins>
+    </div>
+
+    <!-- 3. 우승 결과 & 통계 화면 -->
+    <section id="result-view" class="result-stage hidden">
+      <div class="glass-card result-card">
+        <div class="badge-winner">YOUR NO.1 PICK</div>
+        <h2 class="winner-heading">나의 스텔라이브 최애 곡</h2>
+        
+        <div class="winner-video-wrapper">
+          <iframe id="player-winner" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+
+        <div class="winner-info">
+          <h3 id="title-winner">우승 곡 제목</h3>
+          <p id="singer-winner">가수 이름</p>
+        </div>
+
+        <!-- 결과 공유 -->
+        <div class="share-box">
+          <h4>결과 공유하기</h4>
+          <div class="share-buttons">
+            <button class="btn-share twitter" onclick="shareX()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              X(트위터) 공유
+            </button>
+            <button class="btn-share copy" onclick="copyResultLink()">
+              🔗 링크 복사
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- [애드센스 구좌 3] 우승 화면 배너 -->
+      <div class="ad-banner ad-result">
+        <span class="ad-label">ADVERTISEMENT</span>
+        <ins class="adsbygoogle"
+             style="display:block; text-align:center;"
+             data-ad-layout="in-article"
+             data-ad-format="fluid"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="3333333333"></ins>
+      </div>
+
+      <!-- 전체 랭킹 통계 -->
+      <div class="glass-card stats-card">
+        <h3>📊 스텔라이브 월드컵 인기 랭킹 TOP 5</h3>
+        <p class="stats-sub">전체 플레이 기록 기반 우승 비율 통계</p>
+        <div id="ranking-list" class="ranking-list"></div>
+      </div>
+
+      <button class="btn-retry" onclick="location.reload()">다시 도전하기 </button>
+    </section>
+  </div>
+
+  <div id="toast" class="toast hidden">링크가 클립보드에 복사되었습니다!</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
